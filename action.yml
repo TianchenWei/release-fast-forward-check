@@ -28,7 +28,9 @@ runs:
           exit 1
         fi
         
-        if git merge-base --is-ancestor "$latest_release_tag" HEAD; then
+        git tag -l --sort=v:refname | grep 'bundle'
+        
+        if git merge-base --is-ancestor $latest_release_tag HEAD; then
           echo "Fast-forward merge into $latest_release_tag is possible."
         else
           echo "Fast-forward merge into $latest_release_tag is not possible."
