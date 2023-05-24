@@ -16,7 +16,10 @@ runs:
     - id: ff-check
       shell: bash
       run: |
-        latest_release_tag=`python3 ${{ github.action_path }}/get_last_release.py ${{ github.token }} -r ${{ github.repository }} -p ${{ inputs.tag-pattern }}`
+        pwd
+        ls -al
+        echo ${{ github.action_path }}
+        latest_release_tag=`python3 ${{ github.action_path }}/get_latest_release.py ${{ github.token }} -r ${{ github.repository }} -p ${{ inputs.tag-pattern }}`
         echo $latest_release_tag
         echo "latest-release-tag=$(echo $latest_release_tag)" >> $GITHUB_OUTPUT
         
