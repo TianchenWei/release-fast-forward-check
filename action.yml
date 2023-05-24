@@ -1,0 +1,34 @@
+name: 'Fast-forward check latest release tag in Github'
+description: 'if the current HEAD has diverged from latest release tag, action failed'
+
+inputs:
+  tag-pattern:
+    description: 'Tag pattern'
+    required: false
+outputs:
+  latest-release-tag:
+    description: 'Latest release tag'
+    value: ${{ steps.ff-check.outputs.latest-release-tag }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: ff-check
+      shell: bash
+      run: |
+        latest_release_tag=`python3 ${{ github.action_path }}/get_last_release_tag.py ${{ github.token }} -r ${{ github.repository }} -p ${{ inputs.tag-pattern }}`
+        echo $latest_release_tag
+        echo "latest-release-tag=$(echo $latest_release_tag)" >> $GITHUB_OUTPUT
+        
+        if [ -z "$latest_release_tag" ]; then
+          echo "No release tag found."
+          exit 1
+        fi
+        
+        if git merge-base --is-ancestor "$latest_release_tag" HEAD; then
+          echo "Fast-forward merge into $latest_release_tag is possible."
+        else
+          echo "Fast-forward merge into $latest_release_tag is not possible."
+          exit 1
+        fi
+
