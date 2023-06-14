@@ -27,11 +27,6 @@ runs:
           exit 1
         fi
         
-        echo ">>>>>> debug 1"
-        
-        
-        echo ">>>>>> debug 2"
-        
         if git merge-base --is-ancestor $latest_release_tag HEAD; then
           echo "Fast-forward merge into $latest_release_tag is possible."
         else
