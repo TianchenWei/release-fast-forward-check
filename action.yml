@@ -29,7 +29,6 @@ runs:
         
         echo ">>>>>> debug 1"
         
-        git tag -l --sort=v:refname | grep 'bundle'
         
         echo ">>>>>> debug 2"
         
