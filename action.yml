@@ -17,7 +17,6 @@ runs:
       shell: bash
       run: |
         pwd
-        ls -al
         echo ${{ github.action_path }}
         latest_release_tag=`python3 ${{ github.action_path }}/get_latest_release.py ${{ github.token }} -r ${{ github.repository }} -p ${{ inputs.tag-pattern }}`
         echo $latest_release_tag
@@ -28,7 +27,11 @@ runs:
           exit 1
         fi
         
+        echo ">>>>>> debug 1"
+        
         git tag -l --sort=v:refname | grep 'bundle'
+        
+        echo ">>>>>> debug 2"
         
         if git merge-base --is-ancestor $latest_release_tag HEAD; then
           echo "Fast-forward merge into $latest_release_tag is possible."
